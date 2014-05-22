@@ -31,14 +31,16 @@ from .libsodium import _lib
 try:
     crypto_box_PUBLICKEYBYTES   = _lib.crypto_box_publickeybytes()
     crypto_box_SECRETKEYBYTES   = _lib.crypto_box_secretkeybytes()
-    crypto_box_BEFORENMBYTES    = _lib.crypto_box_beforenmbytes()
     crypto_box_NONCEBYTES       = _lib.crypto_box_noncebytes()
-    crypto_box_ZEROBYTES        = _lib.crypto_box_zerobytes()
-    crypto_box_BOXZEROBYTES     = _lib.crypto_box_boxzerobytes()
     crypto_box_MACBYTES         = _lib.crypto_box_macbytes()
 
     _lib.crypto_box_primitive.restype = c_char_p
     crypto_box_PRIMITIVE        = _lib.crypto_box_primitive()
+
+    _lib.crypto_box_keypair.argtypes = [
+        c_void_p,   # pk
+        c_void_p,   # sk
+    ]
 
     _lib.crypto_box_easy.argtypes = [
         c_void_p,       # out
