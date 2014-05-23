@@ -105,7 +105,7 @@ if __name__ == "__main__":
     pk, sk = crypto_box_keypair()
     pk2, sk2 = crypto_box_keypair()
     assert pk != pk2 and sk != sk2
-    cipher = crypto_box('Hello World!', pk2, sk)
+    cipher = crypto_box(b'Hello World!', pk2, sk)
     print(cipher)
     msg = crypto_box_open(cipher, pk, sk2)
     print(msg)

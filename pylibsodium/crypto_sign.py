@@ -24,7 +24,6 @@
 
 from ctypes import create_string_buffer as _buf
 from ctypes import c_char_p, c_ulonglong, c_void_p, pointer
-from os import urandom
 
 from .libsodium import _lib
 
@@ -83,7 +82,7 @@ def crypto_sign(message, sk):
 def crypto_sign_open(signed, pk):
     """Decrypts a signed message from pk, returning the plaintext message"""
     if not isinstance(signed, bytes):
-        raise TypeError('crypto_sign ciphertext should be a byte string')
+        raise TypeError('crypto_sign message should be a byte string')
     buf = _buf(len(signed))
     mlen = pointer(c_ulonglong(-1))
     if _lib.crypto_sign_open(buf, mlen, signed, len(signed), pk):
@@ -93,7 +92,7 @@ def crypto_sign_open(signed, pk):
 
 if __name__ == "__main__":
     pk, sk = crypto_sign_keypair()
-    signed = crypto_sign('Hello World!', sk)
+    signed = crypto_sign(b'Hello World!', sk)
     print(signed)
     msg = crypto_sign_open(signed, pk)
     print(msg)
