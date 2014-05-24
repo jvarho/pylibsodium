@@ -56,7 +56,7 @@ def crypto_auth(message, key):
     """Authenticates bytes with key, returning an authenticator"""
     if not isinstance(message, bytes):
         raise TypeError('crypto_auth message should be a byte string')
-    buf = _buf(len(message) + crypto_auth_BYTES)
+    buf = _buf(crypto_auth_BYTES)
     if _lib.crypto_auth(buf, message, len(message), key):
         raise ValueError('crypto_auth failed')
     return buf.raw
