@@ -71,9 +71,27 @@ def crypto_auth_verify(auth, message, key):
     return 0 == _lib.crypto_auth_verify(auth, message, len(message), key)
 
 
+def crypto_authenticated(message, key):
+    """Authenticates bytes with key, returning an authenticated message"""
+    return crypto_auth(message, key) + message
+
+
+def crypto_authenticated_open(authenticated, key):
+    """Verifies an authenticated message, the enclosed message"""
+    auth = authenticated[:crypto_auth_BYTES]
+    message = authenticated[crypto_auth_BYTES:]
+    if not crypto_auth_verify(auth, message, key):
+        print(auth, message)
+        raise ValueError('crypto_authenticated_open failed')
+    return message
+
+
 if __name__ == "__main__":
     key = urandom(crypto_auth_KEYBYTES)
-    msg = b'Hello World!'
+    authenticated = crypto_authenticated(b'Hello World!', key)
+    print(authenticated)
+    msg = crypto_authenticated_open(authenticated, key)
+    print(msg)
     auth = crypto_auth(msg, key)
     print(auth)
     print(crypto_auth_verify(auth, msg, key))
