@@ -63,7 +63,7 @@ def crypto_auth(message, key):
 
 
 def crypto_auth_verify(auth, message, key):
-    """Verifies a message, returning True if the authenticator matches"""
+    """Verifies a message, returning True if the authenticator matches key"""
     if not isinstance(auth, bytes):
         raise TypeError('crypto_auth authenticator should be a byte string')
     if not isinstance(message, bytes):
@@ -77,4 +77,5 @@ if __name__ == "__main__":
     auth = crypto_auth(msg, key)
     print(auth)
     print(crypto_auth_verify(auth, msg, key))
+    print(crypto_auth_verify(auth, msg, urandom(crypto_auth_KEYBYTES)))
 

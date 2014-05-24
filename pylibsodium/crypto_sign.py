@@ -69,7 +69,7 @@ def crypto_sign_keypair():
 
 
 def crypto_sign(message, sk):
-    """Signs bytes with sk, returning the signed message"""
+    """Signs bytes with sk, returning a signed message"""
     if not isinstance(message, bytes):
         raise TypeError('crypto_sign message should be a byte string')
     buf = _buf(len(message) + crypto_sign_BYTES)
@@ -80,7 +80,7 @@ def crypto_sign(message, sk):
 
 
 def crypto_sign_open(signed, pk):
-    """Decrypts a signed message from pk, returning the plaintext message"""
+    """Verifies a signed message from pk, returning the enclosed message"""
     if not isinstance(signed, bytes):
         raise TypeError('crypto_sign message should be a byte string')
     buf = _buf(len(signed))
@@ -90,10 +90,49 @@ def crypto_sign_open(signed, pk):
     return buf.raw[:mlen.contents.value]
 
 
+def _sig_is_before():
+    """Finds where crypto_sign puts the signature so it can be detached"""
+    pk, sk = crypto_sign_keypair()
+    msg = b'.' + b'X'*crypto_sign_BYTES + b'.'
+    signed = crypto_sign(msg, sk)
+    if signed.endswith(msg):
+        return True
+    if signed.startswith(msg):
+        return False
+    raise ImportError(
+        'Incompatible libsodium: %s (signature not found)' % _lib._name
+    )
+_sig_before = _sig_is_before()
+
+
+def crypto_signature(message, sk):
+    """Signs bytes with sk, returning the signature"""
+    signed = crypto_sign(message, sk)
+    if _sig_before:
+        return signed[:crypto_sign_BYTES]
+    return signed[-crypto_sign_BYTES:]
+
+
+def crypto_signature_verify(signature, message, pk):
+    """Verifies a message, returning True if the signature matches pk"""
+    if not isinstance(signature, bytes):
+        raise TypeError('crypto_signature_verify signature should be bytes')
+    if not isinstance(signature, bytes):
+        raise TypeError('crypto_signature_verify message should be bytes')
+    signed = signature + message if _sig_before else message + signature
+    try:
+        return crypto_sign_open(signed, pk) == message
+    except ValueError:
+        return False
+
+
 if __name__ == "__main__":
     pk, sk = crypto_sign_keypair()
     signed = crypto_sign(b'Hello World!', sk)
     print(signed)
     msg = crypto_sign_open(signed, pk)
     print(msg)
+    s = crypto_signature(msg, sk)
+    print(crypto_signature_verify(s, msg, pk))
+    print(crypto_signature_verify(s, msg, sk))
 
