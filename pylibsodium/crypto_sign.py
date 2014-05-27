@@ -35,6 +35,12 @@ try:
         c_void_p,   # sk
     ]
 
+    _lib.crypto_sign_seed_keypair.argtypes = [
+        c_void_p,   # pk
+        c_void_p,   # sk
+        c_void_p,   # seed
+    ]
+
     _lib.crypto_sign.argtypes = [
         c_void_p,       # out
         c_void_p,       # outlen
@@ -54,11 +60,17 @@ except AttributeError as e:
     raise ImportError('Incompatible libsodium: %s (%s)' % (_lib._name, str(e)))
 
 
-def crypto_sign_keypair():
+def crypto_sign_keypair(seed=None):
     """Returns a randomly generated keypair (pk, sk)"""
     pk = _buf(crypto_sign_PUBLICKEYBYTES)
     sk = _buf(crypto_sign_SECRETKEYBYTES)
-    _lib.crypto_sign_keypair(pk, sk)
+    if seed is None:
+        _lib.crypto_sign_keypair(pk, sk)
+    else:
+        if len(seed) < crypto_sign_SEEDBYTES:
+            raise ValueError('crypto_sign_keypair invalid seed')
+        seed = seed[:crypto_sign_SEEDBYTES]
+        _lib.crypto_sign_seed_keypair(pk, sk, seed)
     return pk.raw, sk.raw
 
 
@@ -121,9 +133,11 @@ def crypto_signature_verify(signature, message, pk):
 
 
 if __name__ == "__main__":
-    pk, sk = crypto_sign_keypair()
+    pk, sk = crypto_sign_keypair(b'a'*crypto_sign_SEEDBYTES)
     pk2, sk2 = crypto_sign_keypair()
     assert pk != pk2 and sk != sk2
+    pk3, sk3 = crypto_sign_keypair(sk)
+    assert pk == pk3 and sk == sk3
     signed = crypto_sign(b'Hello World!', sk)
     print(signed)
     msg = crypto_sign_open(signed, pk)
