@@ -72,7 +72,12 @@ if crypto_box_NONCEBYTES < 16:
 
 
 def crypto_box_keypair(seed=None):
-    """Returns a randomly generated keypair (pk, sk)"""
+    """Returns a keypair (pk, sk)
+
+    By default, a random keypair is generated.
+    Alternatively, passing a secret key as seed regenerates a keypair.
+    Any 32 byte string can also be used as a seed.
+    """
     pk = _buf(crypto_box_PUBLICKEYBYTES)
     sk = _buf(crypto_box_SECRETKEYBYTES)
     if seed is None:

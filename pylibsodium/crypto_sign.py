@@ -61,7 +61,12 @@ except AttributeError as e:
 
 
 def crypto_sign_keypair(seed=None):
-    """Returns a randomly generated keypair (pk, sk)"""
+    """Returns a keypair (pk, sk)
+
+    By default, a random keypair is generated.
+    Alternatively, passing a secret key as seed regenerates a keypair.
+    Any 32 byte string can also be used as a seed.
+    """
     pk = _buf(crypto_sign_PUBLICKEYBYTES)
     sk = _buf(crypto_sign_SECRETKEYBYTES)
     if seed is None:
