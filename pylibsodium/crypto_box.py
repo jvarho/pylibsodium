@@ -23,6 +23,7 @@ from os import urandom
 from .libsodium import _lib
 
 try:
+    crypto_box_SEEDBYTES        = _lib.crypto_box_seedbytes()
     crypto_box_PUBLICKEYBYTES   = _lib.crypto_box_publickeybytes()
     crypto_box_SECRETKEYBYTES   = _lib.crypto_box_secretkeybytes()
     crypto_box_NONCEBYTES       = _lib.crypto_box_noncebytes()
@@ -34,6 +35,12 @@ try:
     _lib.crypto_box_keypair.argtypes = [
         c_void_p,   # pk
         c_void_p,   # sk
+    ]
+
+    _lib.crypto_box_seed_keypair.argtypes = [
+        c_void_p,   # pk
+        c_void_p,   # sk
+        c_void_p,   # seed
     ]
 
     _lib.crypto_box_easy.argtypes = [
@@ -64,12 +71,18 @@ if crypto_box_NONCEBYTES < 16:
     )
 
 
-def crypto_box_keypair():
+def crypto_box_keypair(seed=None):
     """Returns a randomly generated keypair (pk, sk)"""
     pk = _buf(crypto_box_PUBLICKEYBYTES)
     sk = _buf(crypto_box_SECRETKEYBYTES)
-    _lib.crypto_box_keypair(pk, sk)
-    return pk.raw, sk.raw
+    if seed is None:
+        seed = urandom(crypto_box_SEEDBYTES)
+    else:
+        if len(seed) < crypto_box_SEEDBYTES:
+            raise ValueError('crypto_box_keypair invalid seed')
+        seed = seed[-crypto_box_SEEDBYTES:]
+    _lib.crypto_box_seed_keypair(pk, sk, seed)
+    return pk.raw, sk.raw + seed
 
 
 def crypto_box(message, pk, sk):
@@ -96,9 +109,11 @@ def crypto_box_open(ciphertext, pk, sk):
 
 
 if __name__ == "__main__":
-    pk, sk = crypto_box_keypair()
+    pk, sk = crypto_box_keypair(b'a'*crypto_box_SEEDBYTES)
     pk2, sk2 = crypto_box_keypair()
     assert pk != pk2 and sk != sk2
+    pk3, sk3 = crypto_box_keypair(sk)
+    assert pk == pk3 and sk == sk3
     cipher = crypto_box(b'Hello World!', pk2, sk)
     print(cipher)
     msg = crypto_box_open(cipher, pk, sk2)
