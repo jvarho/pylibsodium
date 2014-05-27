@@ -122,6 +122,8 @@ def crypto_signature_verify(signature, message, pk):
 
 if __name__ == "__main__":
     pk, sk = crypto_sign_keypair()
+    pk2, sk2 = crypto_sign_keypair()
+    assert pk != pk2 and sk != sk2
     signed = crypto_sign(b'Hello World!', sk)
     print(signed)
     msg = crypto_sign_open(signed, pk)
