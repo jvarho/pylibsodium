@@ -84,6 +84,9 @@ def crypto_secretbox_open(ciphertext, key):
     return buf.raw
 
 
+__all__ = ['crypto_secretbox_key', 'crypto_secretbox', 'crypto_secretbox_open']
+
+
 if __name__ == "__main__":
     key = crypto_secretbox_key()
     cipher = crypto_secretbox(b'Hello World!', key)

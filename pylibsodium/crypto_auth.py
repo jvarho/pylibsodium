@@ -85,6 +85,12 @@ def crypto_authenticated_open(authenticated, key):
     return message
 
 
+__all__ = [
+    'crypto_auth_key', 'crypto_auth', 'crypto_auth_verify',
+    'crypto_authenticated', 'crypto_authenticated_open'
+]
+
+
 if __name__ == "__main__":
     key = crypto_auth_key()
     authenticated = crypto_authenticated(b'Hello World!', key)

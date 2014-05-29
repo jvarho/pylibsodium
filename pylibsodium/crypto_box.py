@@ -95,6 +95,9 @@ def crypto_box_open(ciphertext, pk, sk):
     return buf.raw
 
 
+__all__ = ['crypto_box_keypair', 'crypto_box', 'crypto_box_open']
+
+
 if __name__ == "__main__":
     pk, sk = crypto_box_keypair()
     pk2, sk2 = crypto_box_keypair()

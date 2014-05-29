@@ -120,6 +120,12 @@ def crypto_signature_verify(signature, message, pk):
         return False
 
 
+__all__ = [
+    'crypto_sign_keypair', 'crypto_sign', 'crypto_sign_open',
+    'crypto_signature', 'crypto_signature_verify'
+]
+
+
 if __name__ == "__main__":
     pk, sk = crypto_sign_keypair()
     pk2, sk2 = crypto_sign_keypair()
