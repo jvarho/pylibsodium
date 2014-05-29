@@ -56,6 +56,11 @@ if crypto_secretbox_NONCEBYTES < 16:
     )
 
 
+def crypto_secretbox_key():
+    """Generates a random crypto_secretbox key"""
+    return urandom(crypto_secretbox_KEYBYTES)
+
+
 def crypto_secretbox(message, key):
     """Encrypts bytes with secret key, returning the ciphertext"""
     if not isinstance(message, bytes):
@@ -80,7 +85,7 @@ def crypto_secretbox_open(ciphertext, key):
 
 
 if __name__ == "__main__":
-    key = urandom(crypto_secretbox_KEYBYTES)
+    key = crypto_secretbox_key()
     cipher = crypto_secretbox(b'Hello World!', key)
     print(cipher)
     msg = crypto_secretbox_open(cipher, key)

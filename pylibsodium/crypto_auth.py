@@ -46,6 +46,11 @@ except AttributeError as e:
     raise ImportError('Incompatible libsodium: %s (%s)' % (_lib._name, str(e)))
 
 
+def crypto_auth_key():
+    """Generates a random crypto_auth secret key"""
+    return urandom(crypto_auth_KEYBYTES)
+
+
 def crypto_auth(message, key):
     """Authenticates bytes with key, returning an authenticator"""
     if not isinstance(message, bytes):
@@ -81,7 +86,7 @@ def crypto_authenticated_open(authenticated, key):
 
 
 if __name__ == "__main__":
-    key = urandom(crypto_auth_KEYBYTES)
+    key = crypto_auth_key()
     authenticated = crypto_authenticated(b'Hello World!', key)
     print(authenticated)
     msg = crypto_authenticated_open(authenticated, key)
