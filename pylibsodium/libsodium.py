@@ -27,3 +27,8 @@ try:
 except OSError:
     raise ImportError('Unable to load libsodium: %s' % _libsodium_soname)
 
+try:
+    _lib.sodium_init()
+except AttributeError as e:
+    raise ImportError('Incompatible libsodium: %s (%s)' % (_lib._name, str(e)))
+
