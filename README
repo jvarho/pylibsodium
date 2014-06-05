@@ -7,9 +7,10 @@ If you want ready to use Python bindings, please consider PyNaCl[1] instead.
 
 
 Why?
---
+----
 
 Because I need just the low level interface to (an up to date) distro libsodium.
 
 
 [1]:https://pynacl.readthedocs.org/en/latest/
+
