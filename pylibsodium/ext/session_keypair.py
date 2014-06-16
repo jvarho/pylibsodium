@@ -14,7 +14,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-"""Extension for easily creating session keys for forward secrecy"""
+"""Extension for easily creating session key-pairs for forward secrecy"""
 
 from .crypto_box import *
 
