@@ -86,8 +86,11 @@ def crypto_authenticated_open(authenticated, key):
 
 
 __all__ = [
-    'crypto_auth_key', 'crypto_auth', 'crypto_auth_verify',
-    'crypto_authenticated', 'crypto_authenticated_open'
+    'crypto_auth_key',
+    'crypto_auth',
+    'crypto_auth_verify',
+    'crypto_authenticated',
+    'crypto_authenticated_open',
 ]
 
 

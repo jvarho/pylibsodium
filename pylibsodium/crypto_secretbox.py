@@ -84,7 +84,11 @@ def crypto_secretbox_open(ciphertext, key):
     return buf.raw
 
 
-__all__ = ['crypto_secretbox_key', 'crypto_secretbox', 'crypto_secretbox_open']
+__all__ = [
+    'crypto_secretbox_key',
+    'crypto_secretbox',
+    'crypto_secretbox_open',
+]
 
 
 if __name__ == "__main__":

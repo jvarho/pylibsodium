@@ -121,8 +121,11 @@ def crypto_signature_verify(signature, message, pk):
 
 
 __all__ = [
-    'crypto_sign_keypair', 'crypto_sign', 'crypto_sign_open',
-    'crypto_signature', 'crypto_signature_verify'
+    'crypto_sign_keypair',
+    'crypto_sign',
+    'crypto_sign_open',
+    'crypto_signature',
+    'crypto_signature_verify',
 ]
 
 
