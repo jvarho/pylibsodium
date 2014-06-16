@@ -75,7 +75,9 @@ def crypto_secretbox(message, key):
 def crypto_secretbox_open(ciphertext, key):
     """Decrypts a secret key encrypted message, returning the plaintext"""
     if not isinstance(ciphertext, bytes):
-        raise TypeError('crypto_secretbox ciphertext should be a byte string')
+        raise TypeError(
+            'crypto_secretbox_open ciphertext should be a byte string'
+        )
     clen = len(ciphertext) - crypto_secretbox_NONCEBYTES
     nonce = ciphertext[-crypto_secretbox_NONCEBYTES:]
     buf = _buf(clen - crypto_secretbox_MACBYTES)
