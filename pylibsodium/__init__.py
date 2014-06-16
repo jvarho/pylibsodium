@@ -14,7 +14,7 @@
 
 """Python bindings for system libsodium"""
 
-__version__ = '0.1.0'
+__version__ = '0.1.0-git'
 
 from .crypto_auth import *
 from .crypto_box import *
