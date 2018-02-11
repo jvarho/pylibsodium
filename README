@@ -1,16 +1,11 @@
 Python bindings for libsodium
 ====
 
-Not currently for use as is!
+Obsolete:
 
-If you want ready to use Python bindings, please consider PyNaCl[1] instead.
+If you want ready simple Python bindings to libsodium, please consider pysodium[1] instead.
 
+For a higher level library, cryptography.io[2] seems best at the moment.
 
-Why?
-----
-
-Because I need just the low level interface to (an up to date) distro libsodium.
-
-
-[1]:https://pynacl.readthedocs.org/en/latest/
-
+[1]:https://github.com/stef/pysodium
+[2]:https://cryptography.io/en/latest/
